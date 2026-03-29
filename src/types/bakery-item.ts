@@ -1,2 +1,14 @@
-// Shared application types for bakery items and related view models live here.
-export {};
+export type BakeryItemImage = {
+  src: string;
+  alt: string;
+};
+
+export type BakeryItem = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  ingredients: string[];
+  allergens: string[];
+  images: BakeryItemImage[];
+};

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
+import { AdminAuthGate } from "@/components/features/admin/AdminAuthGate";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  return <div className="min-h-screen">{children}</div>;
+  return <AdminAuthGate>{children}</AdminAuthGate>;
 }
