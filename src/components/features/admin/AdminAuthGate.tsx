@@ -13,10 +13,29 @@ export function AdminAuthGate({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isChecking, setIsChecking] = useState(true);
+  const isLoginRoute = pathname === "/admin/login";
+  const [isChecking, setIsChecking] = useState(() => !isLoginRoute);
+  const [isAuthorized, setIsAuthorized] = useState(() => isLoginRoute);
 
   useEffect(() => {
     let mounted = true;
+
+    function handleRouteAccess(session: Session | null) {
+      const hasAccess = Boolean(session);
+
+      if (mounted) {
+        setIsAuthorized(isLoginRoute ? true : hasAccess);
+      }
+
+      if (!hasAccess && !isLoginRoute) {
+        router.replace("/admin/login");
+        return;
+      }
+
+      if (hasAccess && isLoginRoute) {
+        router.replace("/admin");
+      }
+    }
 
     async function checkSession() {
       const session = await getAdminSession();
@@ -29,24 +48,15 @@ export function AdminAuthGate({
       setIsChecking(false);
     }
 
-    function handleRouteAccess(session: Session | null) {
-      const isLoginRoute = pathname === "/admin/login";
-
-      if (!session && !isLoginRoute) {
-        router.replace("/admin/login");
-        return;
-      }
-
-      if (session && isLoginRoute) {
-        router.replace("/admin");
-      }
-    }
-
     checkSession();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        setIsChecking(false);
+      }
+
       handleRouteAccess(session);
     });
 
@@ -54,9 +64,9 @@ export function AdminAuthGate({
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [pathname, router]);
+  }, [isLoginRoute, router]);
 
-  if (isChecking) {
+  if (!isLoginRoute && isChecking) {
     return (
       <div className="flex min-h-screen items-center justify-center px-6">
         <div className="rounded-xl border border-secondary/10 bg-background px-6 py-4 text-sm text-muted shadow-soft">
@@ -64,6 +74,10 @@ export function AdminAuthGate({
         </div>
       </div>
     );
+  }
+
+  if (!isAuthorized) {
+    return null;
   }
 
   return <>{children}</>;

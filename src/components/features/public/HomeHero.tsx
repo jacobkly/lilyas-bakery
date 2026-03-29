@@ -2,18 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Section } from "@/components/layout/Section";
 import { heroImage } from "@/lib/home-content";
+import { BrandLogo } from "@/components/ui/public/BrandLogo";
 
 export function HomeHero() {
   return (
     <Section
-      className="pt-8 md:pt-10 lg:pt-12"
-      containerClassName="space-y-8"
+      className="pt-4 md:pt-6 lg:pt-8"
+      containerClassName="space-y-6"
     >
       <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
-        <div className="order-2 space-y-6 lg:order-1 lg:pr-8">
-          <p className="text-sm font-medium uppercase tracking-[0.28em] text-primary">
-            Lilya&apos;s Bakery
-          </p>
+        <div className="order-2 space-y-5 lg:order-1 lg:pr-8">
+          <BrandLogo className="items-start text-left" />
           <div className="space-y-5">
             <h1 className="max-w-xl text-balance text-secondary">
               A warm bakery experience built around texture, aroma, and quiet indulgence.

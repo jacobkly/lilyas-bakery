@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { signInAdmin } from "@/lib/admin/auth";
 import { Button } from "@/components/ui/admin/button";
 import { Input } from "@/components/ui/admin/input";
 import { Label } from "@/components/ui/admin/label";
 
 export function LoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,8 +25,7 @@ export function LoginForm() {
       return;
     }
 
-    router.replace("/admin");
-    router.refresh();
+    window.location.assign("/admin");
   }
 
   return (
@@ -51,7 +48,7 @@ export function LoginForm() {
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          placeholder="••••••••"
+          placeholder="********"
           required
         />
       </div>

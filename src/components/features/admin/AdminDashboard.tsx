@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   deleteBakeryItem,
   listBakeryItems,
@@ -16,9 +15,9 @@ import {
 import { Button } from "@/components/ui/admin/button";
 
 export function AdminDashboard() {
-  const router = useRouter();
   const [items, setItems] = useState<AdminBakeryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -83,9 +82,9 @@ export function AdminDashboard() {
   }
 
   async function handleSignOut() {
+    setIsSigningOut(true);
     await signOutAdmin();
-    router.replace("/admin/login");
-    router.refresh();
+    window.location.assign("/admin/login");
   }
 
   return (
@@ -103,8 +102,12 @@ export function AdminDashboard() {
           </div>
           <div className="flex gap-3">
             <Button onClick={() => setIsCreateOpen(true)}>Create new item</Button>
-            <Button variant="outline" onClick={handleSignOut}>
-              Sign out
+            <Button
+              variant="outline"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+            >
+              {isSigningOut ? "Signing out..." : "Sign out"}
             </Button>
           </div>
         </header>
