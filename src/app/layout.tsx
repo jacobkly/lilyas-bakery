@@ -18,7 +18,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="en"
       className={`${inter.variable} ${playfairDisplay.variable}`}
     >
-      <body className="bg-background text-foreground font-sans antialiased">
+      <body
+        suppressHydrationWarning
+        className="bg-background text-foreground font-sans antialiased"
+      >
         {children}
       </body>
     </html>
