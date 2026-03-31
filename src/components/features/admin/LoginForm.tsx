@@ -29,7 +29,7 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -57,7 +57,7 @@ export function LoginForm() {
           {errorMessage}
         </p>
       ) : null}
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" className="mt-2 w-full" disabled={isSubmitting}>
         {isSubmitting ? "Signing in..." : "Sign in"}
       </Button>
     </form>

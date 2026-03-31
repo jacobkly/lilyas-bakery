@@ -19,7 +19,7 @@ export async function listBakeryItems() {
     .select(
       "id, name, description, main_image_url, additional_image_urls, ingredients, allergens, created_at, updated_at",
     )
-    .order("created_at", { ascending: false });
+    .order("updated_at", { ascending: false });
 }
 
 export async function uploadBakeryImage(file: File) {

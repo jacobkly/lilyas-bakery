@@ -11,6 +11,7 @@ import {
 } from "@/lib/admin/bakery-items";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -138,100 +139,134 @@ export function BakeryItemFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit bakery item" : "Create bakery item"}
-          </DialogTitle>
-          <DialogDescription>
-            Keep the form simple and complete the core content first.
-          </DialogDescription>
-        </DialogHeader>
-
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="mt-6 space-y-6"
+      <DialogContent className="max-w-[950px] p-8 sm:p-10">
+        <DialogClose
+          aria-label="Close bakery item form"
+          className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full border border-secondary/10 bg-background/90 text-lg leading-none text-muted shadow-sm transition-colors hover:bg-section hover:text-secondary"
         >
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" {...form.register("name")} />
-            {form.formState.errors.name ? (
-              <p className="text-sm text-red-700">
-                {form.formState.errors.name.message}
+          <span aria-hidden="true">x</span>
+        </DialogClose>
+
+        <div className="space-y-8">
+          <DialogHeader className="max-w-2xl space-y-3 pr-14">
+            <DialogTitle>
+              {isEditing ? "Edit Bakery Item" : "Create Bakery Item"}
+            </DialogTitle>
+            <DialogDescription>
+              Refine the writing and imagery together so the item feels complete
+              before it appears on the menu.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-8"
+          >
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1.45fr)_minmax(0,0.95fr)] md:gap-10">
+              <div className="space-y-8">
+                <section className="space-y-6 rounded-[28px] bg-background/80 p-6 ring-1 ring-secondary/8 sm:p-7">
+                  <div className="space-y-2.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" {...form.register("name")} />
+                    {form.formState.errors.name ? (
+                      <p className="text-sm text-red-700">
+                        {form.formState.errors.name.message}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      className="min-h-[164px]"
+                      {...form.register("description")}
+                    />
+                    {form.formState.errors.description ? (
+                      <p className="text-sm text-red-700">
+                        {form.formState.errors.description.message}
+                      </p>
+                    ) : null}
+                  </div>
+                </section>
+
+                <section className="rounded-[28px] bg-background/72 p-6 ring-1 ring-secondary/8 sm:p-7">
+                  <TagInput
+                    label="Ingredients"
+                    value={form.watch("ingredients")}
+                    onChange={(value) => form.setValue("ingredients", value)}
+                    placeholder="Add an ingredient"
+                  />
+                </section>
+
+                <section className="rounded-[28px] bg-background/72 p-6 ring-1 ring-secondary/8 sm:p-7">
+                  <TagInput
+                    label="Allergens"
+                    value={form.watch("allergens")}
+                    onChange={(value) => form.setValue("allergens", value)}
+                    placeholder="Add an allergen"
+                  />
+                </section>
+              </div>
+
+              <aside className="space-y-6 rounded-[28px] bg-section/45 p-6 ring-1 ring-secondary/8 sm:p-7">
+                <ImageUploadField
+                  label="Main image"
+                  variant="main"
+                  currentUrls={item?.mainImageUrl ? [item.mainImageUrl] : []}
+                  onFilesChange={(files) => setMainImageFile(files[0] ?? null)}
+                />
+
+                <div className="h-px bg-secondary/8" />
+
+                <ImageUploadField
+                  label="Additional images"
+                  multiple
+                  currentUrls={currentAdditionalUrls}
+                  onRemoveCurrentUrl={(url) => {
+                    setCurrentAdditionalUrls((current) =>
+                      current.filter((itemUrl) => itemUrl !== url),
+                    );
+                  }}
+                  onFilesChange={(files) => setAdditionalImageFiles(files)}
+                />
+              </aside>
+            </div>
+
+            {formError ? (
+              <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                {formError}
               </p>
             ) : null}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea id="description" {...form.register("description")} />
-            {form.formState.errors.description ? (
-              <p className="text-sm text-red-700">
-                {form.formState.errors.description.message}
+            {formSuccess ? (
+              <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                {formSuccess}
               </p>
             ) : null}
-          </div>
 
-          <ImageUploadField
-            label="Main image"
-            currentUrls={item?.mainImageUrl ? [item.mainImageUrl] : []}
-            onFilesChange={(files) => setMainImageFile(files[0] ?? null)}
-          />
-
-          <ImageUploadField
-            label="Additional images"
-            multiple
-            currentUrls={currentAdditionalUrls}
-            onRemoveCurrentUrl={(url) => {
-              setCurrentAdditionalUrls((current) =>
-                current.filter((itemUrl) => itemUrl !== url),
-              );
-            }}
-            onFilesChange={(files) => setAdditionalImageFiles(files)}
-          />
-
-          <TagInput
-            label="Ingredients"
-            value={form.watch("ingredients")}
-            onChange={(value) => form.setValue("ingredients", value)}
-            placeholder="Add an ingredient"
-          />
-
-          <TagInput
-            label="Allergens"
-            value={form.watch("allergens")}
-            onChange={(value) => form.setValue("allergens", value)}
-            placeholder="Add an allergen"
-          />
-
-          {formError ? (
-            <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-              {formError}
-            </p>
-          ) : null}
-          {formSuccess ? (
-            <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-              {formSuccess}
-            </p>
-          ) : null}
-
-          <div className="flex items-center justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting
-                ? "Saving..."
-                : isEditing
-                  ? "Save changes"
-                  : "Create item"}
-            </Button>
-          </div>
-        </form>
+            <div className="flex flex-wrap items-center justify-end gap-3 border-t border-secondary/8 pt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                className="rounded-full px-5"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="rounded-full px-5"
+              >
+                {form.formState.isSubmitting
+                  ? "Saving..."
+                  : isEditing
+                    ? "Save changes"
+                    : "Create item"}
+              </Button>
+            </div>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

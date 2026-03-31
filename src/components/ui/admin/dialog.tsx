@@ -17,14 +17,18 @@ export function DialogContent({
 }) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-secondary/30 backdrop-blur-sm" />
-      <DialogPrimitive.Content
-        className={cn(
-          "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-xl bg-background p-6 shadow-2xl focus:outline-none md:p-8",
-          className,
-        )}
-      >
-        {children}
+      <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm" />
+      <DialogPrimitive.Content className="fixed inset-0 z-50 overflow-y-auto focus:outline-none">
+        <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 sm:py-16">
+          <div
+            className={cn(
+              "relative w-full max-w-2xl rounded-2xl bg-background shadow-xl",
+              className,
+            )}
+          >
+            {children}
+          </div>
+        </div>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );
@@ -47,7 +51,11 @@ export function DialogTitle({
   children: ReactNode;
   className?: string;
 }) {
-  return <h2 className={cn("text-2xl text-secondary", className)}>{children}</h2>;
+  return (
+    <DialogPrimitive.Title className={cn("text-2xl text-secondary", className)}>
+      {children}
+    </DialogPrimitive.Title>
+  );
 }
 
 export function DialogDescription({
@@ -57,5 +65,11 @@ export function DialogDescription({
   children: ReactNode;
   className?: string;
 }) {
-  return <p className={cn("text-sm text-muted", className)}>{children}</p>;
+  return (
+    <DialogPrimitive.Description
+      className={cn("text-sm text-muted", className)}
+    >
+      {children}
+    </DialogPrimitive.Description>
+  );
 }

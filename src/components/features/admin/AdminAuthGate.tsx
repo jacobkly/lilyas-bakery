@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { getAdminSession } from "@/lib/admin/auth";
 import { supabase } from "@/lib/supabase/client";
+import { AdminPageLoading } from "@/components/features/admin/AdminPageLoading";
 
 export function AdminAuthGate({
   children,
@@ -67,13 +68,7 @@ export function AdminAuthGate({
   }, [isLoginRoute, router]);
 
   if (!isLoginRoute && isChecking) {
-    return (
-      <div className="flex min-h-screen items-center justify-center px-6">
-        <div className="rounded-xl border border-secondary/10 bg-background px-6 py-4 text-sm text-muted shadow-soft">
-          Checking admin session...
-        </div>
-      </div>
-    );
+    return <AdminPageLoading />;
   }
 
   if (!isAuthorized) {

@@ -42,16 +42,11 @@ export const getBakeryItems = cache(async () => {
     .select(
       "id, name, description, main_image_url, additional_image_urls, ingredients, allergens, created_at, updated_at",
     )
-    .order("created_at", { ascending: false });
+    .order("name", { ascending: true });
 
   if (error) {
     throw new Error(`Failed to fetch bakery items: ${error.message}`);
   }
 
   return data.map(mapBakeryItem);
-});
-
-export const getBakeryItemBySlug = cache(async (slug: string) => {
-  const items = await getBakeryItems();
-  return items.find((item) => item.slug === slug) ?? null;
 });

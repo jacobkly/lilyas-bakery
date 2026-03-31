@@ -37,9 +37,9 @@ export function TagInput({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <Label>{label}</Label>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <Input
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
@@ -55,7 +55,7 @@ export function TagInput({
           Add
         </Button>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {value.map((tag) => (
           <span
             key={tag}
