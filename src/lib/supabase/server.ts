@@ -15,5 +15,8 @@ if (!supabasePublishableKey) {
 }
 
 export function createServerSupabaseClient() {
-  return createClient<Database>(supabaseUrl, supabasePublishableKey);
+  return createClient<Database>(
+    supabaseUrl as string,
+    supabasePublishableKey as string,
+  );
 }

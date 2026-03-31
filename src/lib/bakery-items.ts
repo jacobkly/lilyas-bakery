@@ -48,5 +48,7 @@ export const getBakeryItems = cache(async () => {
     throw new Error(`Failed to fetch bakery items: ${error.message}`);
   }
 
-  return data.map(mapBakeryItem);
+  const rows = (data ?? []) as BakeryItemRow[];
+
+  return rows.map(mapBakeryItem);
 });
